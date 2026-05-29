@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>หัวข้อที่ 9: Requirements Mapping</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; max-width: 1280px; margin: 40px auto; padding: 0 24px; line-height: 1.9; color: #c9d8e8; background: #0f1923; }
+  h1 { color: #ffffff; border-bottom: 2px solid #00d4aa; padding-bottom: 14px; font-size: 1.9em; }
+  h2 { color: #00d4aa; margin-top: 50px; font-size: 1.25em; border-left: 4px solid #00d4aa; padding-left: 12px; }
+  h3 { color: #8ab4c8; margin-top: 30px; }
+  pre { border-radius: 8px; font-size: 13.5px; line-height: 1.7; margin: 16px 0; }
+  code.inline { background: #1a2a3a; padding: 2px 8px; border-radius: 4px; font-size: 0.92em; color: #00d4aa; font-family: monospace; }
+  .box { background: #0d2233; border-left: 4px solid #00d4aa; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #8ab4c8; }
+  .warn { background: #1a1a0d; border-left: 4px solid #f59e0b; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #c9d8e8; }
+  .success { background: #0d1a0d; border-left: 4px solid #10b981; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #c9d8e8; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #1a2a3a; border-radius: 8px; overflow: hidden; }
+  th { background: #0d2233; color: #00d4aa; padding: 12px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid #1e3a4a; }
+  td { padding: 11px 16px; border-bottom: 1px solid #1e3a4a; color: #c9d8e8; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #162030; }
+  hr { border: none; border-top: 1px solid #1e3a4a; margin: 40px 0; }
+  .keyword { background: #1a2a0d; border: 1px solid #f59e0b; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 13px; color: #fbbf24; }
+  .formula { background: #0a1520; border: 2px solid #00d4aa; border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-family: monospace; font-size: 14px; color: #00d4aa; }
+  .step { background: #1a2a3a; border: 1px solid #1e3a4a; border-radius: 10px; padding: 18px 22px; margin: 14px 0; }
+  .badge { display: inline-block; background: #00d4aa; color: #0f1923; border-radius: 20px; padding: 2px 12px; font-size: 13px; font-weight: bold; margin-right: 8px; }
+  .badge-green { background: #10b981; color: #fff; }
+  .badge-red { background: #ef4444; color: #fff; }
+  .badge-orange { background: #f97316; color: #fff; }
+  .badge-gray { background: #6b7280; color: #fff; }
+  footer { margin-top: 48px; padding: 14px 24px; border-top: 1px solid #1e3a4a; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 12px; }
+  footer span:last-child { white-space: nowrap; flex-shrink: 0; }
+  .tab-nav {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    background: #0d2233;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 36px;
+    border: 1px solid #1e3a4a;
+  }
+  .tab-nav a.tab {
+    display: block;
+    text-align: center;
+    color: #8ab4c8;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 7px 6px;
+    border-radius: 6px;
+    border: 1px solid #1e3a4a;
+    background: #1a2a3a;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .tab-nav a.tab:hover { background: #1e3a4a; color: #00d4aa; border-color: #00d4aa; }
+  .tab-nav a.tab.active { background: #00d4aa; color: #0f1923; border-color: #00d4aa; font-weight: 700; }
+
+  .demo-table { width: 100%; border-collapse: collapse; background: #1a2a3a; border-radius: 8px; overflow: hidden; margin: 20px 0; }
+  .demo-table th { background: #0d2233; color: #00d4aa; padding: 10px 14px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #1e3a4a; }
+  .demo-table td { padding: 10px 14px; border-bottom: 1px solid #1e3a4a; font-size: 13px; color: #c9d8e8; }
+  .covered { color: #10b981; font-weight: 600; }
+  .not-covered { color: #ef4444; font-weight: 600; }
+  .tc-link { display: inline-block; padding: 2px 8px; margin: 2px; background: #0d2233; border: 1px solid #1e3a4a; border-radius: 4px; color: #00d4aa; font-size: 11px; font-weight: 500; }
+
+  /* ===== PREVIEW: mirrors real report styles ===== */
+  .preview-wrap { background: #f5f5f5; padding: 24px; border-radius: 8px; margin: 20px 0; border: 2px dashed #9ca3af; }
+  .preview-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 14px; }
+  .preview-section { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; }
+  .preview-h2 { color: #1f2937; font-size: 15px; font-weight: 600; margin: 0 0 20px 0; padding-left: 15px; padding-bottom: 10px; border-left: 5px solid #5b4fc5; border-bottom: 3px solid #9ca3af; text-transform: uppercase; }
+  .preview-h3 { color: #374151; font-size: 14px; font-weight: 600; margin: 20px 0 12px; padding-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #9ca3af; }
+  /* summary-card */
+  .p-summary-grid { width: 100%; margin-bottom: 20px; }
+  .p-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 15px; color: #1a202c; display: inline-block; width: 32%; vertical-align: top; box-sizing: border-box; margin-right: 1%; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 13px; }
+  .p-card.half { width: 49%; }
+  .p-card strong { color: #1f2937; font-weight: 700; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; text-transform: uppercase; font-size: 13px; letter-spacing: 0.04em; }
+  .p-card small { color: #6b7280; font-size: 11px; }
+  /* badges */
+  .p-green { background: #10b981; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  .p-yellow { background: #f59e0b; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  .p-red { background: #ef4444; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  .p-plain { background: #10b981; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  /* table */
+  .p-table { width: 100%; border-collapse: collapse; background: white !important; margin: 16px 0; border: 1px solid #e5e7eb; }
+  .p-table th { background: #5b4fc5 !important; color: white !important; font-weight: 600; padding: 12px; text-align: left; font-size: 12px; text-transform: uppercase; border-right: 1px solid rgba(255,255,255,0.2); }
+  .p-table td { padding: 12px; border-bottom: 1px solid #e5e7eb !important; border-right: 1px solid #e5e7eb; color: #1a202c !important; background: white !important; font-size: 12px; vertical-align: top; }
+  .p-table tr:nth-child(even) td { background: white !important; }
+  .p-table tr:last-child td { border-bottom: none !important; }
+  .p-unlinked-hdr { background: #f3f4f6 !important; color: #374151 !important; }
+  /* priority cards */
+  .p-priority-row { display: flex; gap: 16px; margin: 16px 0; }
+  .p-priority-card { flex: 1; background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .p-priority-card .pct { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .p-priority-card .lbl { font-size: 12px; font-weight: 700; text-transform: uppercase; }
+  .p-priority-card .cnt { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+  /* quick stats */
+  .p-qs-row { display: flex; align-items: center; background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; flex-wrap: wrap; }
+  .p-qs-item { text-align: center; flex: 1; padding: 8px; min-width: 100px; }
+  .p-qs-val { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .p-qs-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .p-qs-note { font-size: 10px; color: #9ca3af; margin-top: 2px; font-style: italic; }
+  .p-qs-div { font-size: 28px; color: #d1d5db; padding: 0 8px; align-self: center; }
+  /* timeline */
+  .p-tl { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; margin: 16px 0; }
+  .p-tl-head { display: grid; grid-template-columns: 120px 90px 1fr; background: #5b4fc5; color: white; padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .p-tl-row { display: grid; grid-template-columns: 120px 90px 1fr; padding: 10px 14px; border-bottom: 1px solid #f3f4f6; align-items: center; font-size: 12px; }
+  .p-tl-row.ontime { background: #f0fdf4; }
+  .p-tl-row.delay { background: #fef2f2; }
+  .p-tl-row.empty { color: #d1d5db; }
+  .p-delay-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; }
+  .p-chip { display: inline-block; padding: 2px 8px; margin: 2px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; color: #4f46e5; font-size: 11px; }
+  /* rec cards */
+  .p-rec { background: white; border-radius: 8px; padding: 14px 18px; margin: 8px 0; border-left: 5px solid #5b4fc5; box-shadow: 0 1px 2px rgba(0,0,0,0.05); color: #1a202c; font-size: 13px; }
+  .p-rec.red { border-left-color: #ef4444; }
+  .p-rec.orange { border-left-color: #f97316; }
+  .p-rec.green { border-left-color: #10b981; }
+  .p-rec.blue { border-left-color: #3b82f6; }
+  /* coverage */
+  .p-covered { color: #059669; font-weight: 600; }
+  .p-not-covered { color: #dc2626; font-weight: 600; }
+  .p-tc-link { display: inline-block; padding: 2px 8px; margin: 2px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; color: #4f46e5; font-size: 11px; }
+  /* bug severity */
+  .p-sev-critical { color: #dc2626; font-weight: 700; }
+  .p-sev-high { color: #ea580c; font-weight: 600; }
+  .p-sev-medium { color: #ca8a04; }
+  .p-sev-low { color: #16a34a; }
+  .p-unlinked-hdr { background: #f3f4f6; font-weight: 700; padding: 10px 14px; font-size: 13px; color: #374151; }
+  /* pipeline */
+  .p-pipe-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .p-pipe-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; color: #1a202c; flex: 1; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 13px; }
+  .p-pipe-card strong { color: #1f2937; font-weight: 700; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .p-fail-box { margin-top: 8px; padding: 8px 12px; background: #fef2f2; border-left: 3px solid #ef4444; border-radius: 4px; font-size: 12px; color: #991b1b; }
+  /* meta cards */
+  .p-meta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+  .p-meta-card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; flex: 1; min-width: 180px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+  .p-meta-card strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; }
+  .p-meta-card span { font-size: 13px; color: #1f2937; }
+  /* row colors for readiness */
+  .p-row-red td { background: #fef2f2 !important; }
+  .p-row-orange td { background: #fffbeb !important; }
+  .p-row-green td { background: #f0fdf4 !important; color: #16a34a; font-weight: 600; }
+
+
+  .preview-section table { background: white !important; }
+  .preview-section th { background: #5b4fc5 !important; color: white !important; border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+  .preview-section td { background: white !important; color: #1a202c !important; border-bottom: 1px solid #e5e7eb !important; }
+  .preview-section tr:nth-child(even) td { background: white !important; }
+</style>
+</head>
+<body>
+
+<nav class="tab-nav">
+  <a href="00_index.html" class="tab">🏠 หน้าหลัก</a>
+  <a href="01_executive_summary.html" class="tab">📊 Executive Summary</a>
+  <a href="02_priority_coverage.html" class="tab">🎯 Priority Coverage</a>
+  <a href="03_pbi_summary.html" class="tab">📋 PBI Summary</a>
+  <a href="04_recommendations.html" class="tab">💡 Recommendations</a>
+  <a href="05_dev_readiness.html" class="tab">⚠️ Dev Readiness</a>
+  <a href="06_pbi_readiness.html" class="tab">📋 PBI Readiness</a>
+  <a href="07_delivery_timeline.html" class="tab">📅 Delivery Timeline</a>
+  <a href="08_requirements_mapping.html" class="tab active">🔗 Requirements Mapping</a>
+  <a href="09_bug_traceability.html" class="tab">🐞 Bug Traceability</a>
+  <a href="10_pipeline_runs.html" class="tab">🚀 Pipeline Runs</a>
+  <a href="11_report_metadata.html" class="tab">📄 Report Metadata</a>
+</nav>
+
+<h1>🔗 Requirements Mapping</h1>
+<p>หัวข้อนี้แสดง traceability ระหว่าง PBI กับ Test Scenarios — Level 2 ของ RTM (Requirements Traceability Matrix)</p>
+
+<hr>
+
+<h2>🎯 วัตถุประสงค์</h2>
+<div class="box">
+  แสดง Traceability Matrix ระหว่าง Requirements (PBI) และ Test Scenarios เพื่อยืนยันว่าทุก Requirement ได้รับการครอบคลุมโดย Test Cases อย่างครบถ้วน และสามารถระบุ Requirements ที่ยังขาด Test Coverage ได้อย่างชัดเจน
+</div>
+
+<hr>
+
+<h2>🎨 ตัวอย่างตารางที่แสดงในรายงาน</h2>
+<div class="preview-wrap">
+  <div class="preview-label">📄 ตัวอย่างตาราง Requirements Mapping</div>
+  <div class="preview-section">
+    <div class="preview-h2">🔗 Requirements Mapping</div>
+    <table class="p-table">
+      <tr><th>PBI ID</th><th>PBI Title</th><th>จำนวน Test Scenario</th><th>Test Scenario IDs</th><th>Coverage Status</th></tr>
+      <tr><td><a href="#" style="color:#4f46e5;font-weight:600">PBI-12345</a></td><td>User Login with OTP</td><td style="text-align:center"><strong>5</strong></td><td><span class="p-tc-link">TC-11001</span><span class="p-tc-link">TC-11002</span><span class="p-tc-link">TC-11003</span></td><td class="p-covered">✅ Covered</td></tr>
+      <tr><td><a href="#" style="color:#4f46e5;font-weight:600">PBI-12346</a></td><td>Export Report to PDF</td><td style="text-align:center"><strong>0</strong></td><td>-</td><td class="p-not-covered">❌ Not covered</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr>
+
+<h2>📍 ที่มาของข้อมูล</h2>
+<table>
+  <tr><th>ข้อมูล</th><th>ดึงจาก</th></tr>
+  <tr><td>PBI ID</td><td><code class="inline">item['pbi_id']</code> จาก rtm_data</td></tr>
+  <tr><td>PBI Title</td><td><code class="inline">System.Title</code> ผ่าน <code class="inline">batch_get_pbi_details()</code></td></tr>
+  <tr><td>จำนวน Test Scenario</td><td><code class="inline">len(item['test_cases'])</code></td></tr>
+  <tr><td>Test Scenario IDs</td><td><code class="inline">tc['id']</code> จาก test_cases list</td></tr>
+  <tr><td>Coverage Status</td><td>ตรวจสอบว่า <code class="inline">len(test_cases) > 0</code></td></tr>
+</table>
+
+<hr>
+
+<h2>💻 โค้ดหลักที่ใช้</h2>
+<h3>ฟังก์ชัน: <code class="inline">generate_requirements_mapping(rtm_data, ...)</code></h3>
+<p>อยู่ใน <code class="inline">templates/html_template.py</code></p>
+
+<pre><code class="language-python">def generate_requirements_mapping(rtm_data, query_mode, org, project_name, get_pbi_title_fn, ...):
+    """สร้างตาราง Requirements Mapping"""
+
+    for item in rtm_data:
+        pbi_id = item['pbi_id']
+        test_cases = item.get('test_cases', [])
+        tags = item.get('tags', '')
+
+        # ข้าม PBI ที่มี tag PBI.Validator:FAIL
+        tag_list = [t.strip() for t in tags.split(';')] if tags else []
+        has_validator_fail = any('pbi.validator:fail' in tag.lower() for tag in tag_list)
+        if has_validator_fail:
+            continue  # ข้าม PBI นี้
+
+        # ดึง PBI Title จาก cache
+        pbi_title = get_pbi_title_fn(pbi_id)  # System.Title
+
+        # สร้าง links สำหรับแต่ละ test scenario
+        tc_links = []
+        for tc in test_cases:
+            tc_id = tc.get('id', '')
+            tc_url = f"https://dev.azure.com/{org}/{project}/_workitems/edit/{tc_id}"
+            tc_links.append(f'&lt;a href="{tc_url}"&gt;TC-{tc_id}&lt;/a&gt;')
+
+        # กำหนด Coverage Status
+        if len(test_cases) > 0:
+            coverage_status = '✅ Covered'
+            coverage_style = 'color: #059669; font-weight: 600;'
+        else:
+            coverage_status = '❌ Not covered'
+            coverage_style = 'color: #ef4444; font-weight: 600;'
+
+        # สร้าง table row
+        html += f'''
+        &lt;tr&gt;
+            &lt;td&gt;&lt;a href="{pbi_url}"&gt;{pbi_id}&lt;/a&gt;&lt;/td&gt;
+            &lt;td&gt;{pbi_title}&lt;/td&gt;
+            &lt;td&gt;{len(test_cases)}&lt;/td&gt;
+            &lt;td&gt;{', '.join(tc_links) or '-'}&lt;/td&gt;
+            &lt;td style="{coverage_style}"&gt;{coverage_status}&lt;/td&gt;
+        &lt;/tr&gt;
+        '''
+</code></pre>
+
+<hr>
+
+<h2>🔑 Keyword สำคัญ</h2>
+<table>
+  <tr><th>Keyword</th><th>ความหมาย</th></tr>
+  <tr><td><span class="keyword">PBI.Validator:FAIL</span></td><td>Tag ที่ทำให้ PBI ถูกข้ามในตาราง</td></tr>
+  <tr><td><span class="keyword">System.Tags</span></td><td>Tags ของ PBI (คั่นด้วย semicolon)</td></tr>
+  <tr><td><span class="keyword">batch_get_pbi_details()</span></td><td>ดึง PBI titles แบบ batch เพื่อประสิทธิภาพ</td></tr>
+  <tr><td><span class="keyword">TC-XXXXX</span></td><td>รูปแบบการแสดง Test Scenario ID</td></tr>
+  <tr><td><span class="keyword">_pbi_cache</span></td><td>Dictionary cache เก็บ PBI titles ไว้ไม่ต้องดึงซ้ำ</td></tr>
+</table>
+
+<footer>
+  <span style="font-size:0.72em;color:#4a6a7a">Prepared by Mintita Mahapittayaphaisan (Mook) — Lead QA Engineer, AgriTech &amp; Traceability | FIT and CPCRT Business Delivery</span>
+  <span style="font-size:0.68em;color:#4a6a7a">© 2026 Quality Assurance Division</span>
+</footer>
+
+</body>
+</html>

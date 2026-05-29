@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>หัวข้อที่ 7: PBI Readiness Status</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; max-width: 1280px; margin: 40px auto; padding: 0 24px; line-height: 1.9; color: #c9d8e8; background: #0f1923; }
+  h1 { color: #ffffff; border-bottom: 2px solid #00d4aa; padding-bottom: 14px; font-size: 1.9em; }
+  h2 { color: #00d4aa; margin-top: 50px; font-size: 1.25em; border-left: 4px solid #00d4aa; padding-left: 12px; }
+  h3 { color: #8ab4c8; margin-top: 30px; }
+  pre { border-radius: 8px; font-size: 13.5px; line-height: 1.7; margin: 16px 0; }
+  code.inline { background: #1a2a3a; padding: 2px 8px; border-radius: 4px; font-size: 0.92em; color: #00d4aa; font-family: monospace; }
+  .box { background: #0d2233; border-left: 4px solid #00d4aa; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #8ab4c8; }
+  .warn { background: #1a1a0d; border-left: 4px solid #f59e0b; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #c9d8e8; }
+  .success { background: #0d1a0d; border-left: 4px solid #10b981; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #c9d8e8; }
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #1a2a3a; border-radius: 8px; overflow: hidden; }
+  th { background: #0d2233; color: #00d4aa; padding: 12px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid #1e3a4a; }
+  td { padding: 11px 16px; border-bottom: 1px solid #1e3a4a; color: #c9d8e8; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #162030; }
+  hr { border: none; border-top: 1px solid #1e3a4a; margin: 40px 0; }
+  .keyword { background: #1a2a0d; border: 1px solid #f59e0b; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 13px; color: #fbbf24; }
+  .formula { background: #0a1520; border: 2px solid #00d4aa; border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-family: monospace; font-size: 14px; color: #00d4aa; }
+  .step { background: #1a2a3a; border: 1px solid #1e3a4a; border-radius: 10px; padding: 18px 22px; margin: 14px 0; }
+  .badge { display: inline-block; background: #00d4aa; color: #0f1923; border-radius: 20px; padding: 2px 12px; font-size: 13px; font-weight: bold; margin-right: 8px; }
+  .badge-green { background: #10b981; color: #fff; }
+  .badge-red { background: #ef4444; color: #fff; }
+  .badge-orange { background: #f97316; color: #fff; }
+  .badge-gray { background: #6b7280; color: #fff; }
+  footer { margin-top: 48px; padding: 14px 24px; border-top: 1px solid #1e3a4a; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 12px; }
+  footer span:last-child { white-space: nowrap; flex-shrink: 0; }
+  .tab-nav {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    background: #0d2233;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 36px;
+    border: 1px solid #1e3a4a;
+  }
+  .tab-nav a.tab {
+    display: block;
+    text-align: center;
+    color: #8ab4c8;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 7px 6px;
+    border-radius: 6px;
+    border: 1px solid #1e3a4a;
+    background: #1a2a3a;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .tab-nav a.tab:hover { background: #1e3a4a; color: #00d4aa; border-color: #00d4aa; }
+  .tab-nav a.tab.active { background: #00d4aa; color: #0f1923; border-color: #00d4aa; font-weight: 700; }
+
+  .demo-table { width: 100%; border-collapse: collapse; background: #1a2a3a; border-radius: 8px; overflow: hidden; margin: 20px 0; }
+  .demo-table th { background: #0d2233; color: #00d4aa; padding: 10px 14px; font-size: 12px; text-transform: uppercase; text-align: center; border-bottom: 1px solid #1e3a4a; }
+  .demo-table td { padding: 10px 14px; border-bottom: 1px solid #1e3a4a; font-size: 13px; text-align: center; color: #c9d8e8; }
+  .demo-table td:nth-child(2) { text-align: left; }
+  .row-red { background: #2a1a1a !important; }
+  .row-orange { background: #2a1f0d !important; }
+  .row-green { background: #0d2a1a !important; }
+
+  /* ===== PREVIEW: mirrors real report styles ===== */
+  .preview-wrap { background: #f5f5f5; padding: 24px; border-radius: 8px; margin: 20px 0; border: 2px dashed #9ca3af; }
+  .preview-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 14px; }
+  .preview-section { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; }
+  .preview-h2 { color: #1f2937; font-size: 15px; font-weight: 600; margin: 0 0 20px 0; padding-left: 15px; padding-bottom: 10px; border-left: 5px solid #5b4fc5; border-bottom: 3px solid #9ca3af; text-transform: uppercase; }
+  .preview-h3 { color: #374151; font-size: 14px; font-weight: 600; margin: 20px 0 12px; padding-bottom: 8px; text-transform: uppercase; border-bottom: 2px solid #9ca3af; }
+  /* summary-card */
+  .p-summary-grid { width: 100%; margin-bottom: 20px; }
+  .p-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 15px; color: #1a202c; display: inline-block; width: 32%; vertical-align: top; box-sizing: border-box; margin-right: 1%; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 13px; }
+  .p-card.half { width: 49%; }
+  .p-card strong { color: #1f2937; font-weight: 700; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; text-transform: uppercase; font-size: 13px; letter-spacing: 0.04em; }
+  .p-card small { color: #6b7280; font-size: 11px; }
+  /* badges */
+  .p-green { background: #10b981; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  .p-yellow { background: #f59e0b; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  .p-red { background: #ef4444; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  .p-plain { background: #10b981; color: #fff; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-size: 13px; display: inline-block; }
+  /* table */
+  .p-table { width: 100%; border-collapse: collapse; background: white !important; margin: 16px 0; border: 1px solid #e5e7eb; }
+  .p-table th { background: #5b4fc5 !important; color: white !important; font-weight: 600; padding: 12px; text-align: left; font-size: 12px; text-transform: uppercase; border-right: 1px solid rgba(255,255,255,0.2); }
+  .p-table td { padding: 12px; border-bottom: 1px solid #e5e7eb !important; border-right: 1px solid #e5e7eb; color: #1a202c !important; background: white !important; font-size: 12px; vertical-align: top; }
+  .p-table tr:nth-child(even) td { background: white !important; }
+  .p-table tr:last-child td { border-bottom: none !important; }
+  .p-unlinked-hdr { background: #f3f4f6 !important; color: #374151 !important; }
+  /* priority cards */
+  .p-priority-row { display: flex; gap: 16px; margin: 16px 0; }
+  .p-priority-card { flex: 1; background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .p-priority-card .pct { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .p-priority-card .lbl { font-size: 12px; font-weight: 700; text-transform: uppercase; }
+  .p-priority-card .cnt { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+  /* quick stats */
+  .p-qs-row { display: flex; align-items: center; background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; flex-wrap: wrap; }
+  .p-qs-item { text-align: center; flex: 1; padding: 8px; min-width: 100px; }
+  .p-qs-val { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .p-qs-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .p-qs-note { font-size: 10px; color: #9ca3af; margin-top: 2px; font-style: italic; }
+  .p-qs-div { font-size: 28px; color: #d1d5db; padding: 0 8px; align-self: center; }
+  /* timeline */
+  .p-tl { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; margin: 16px 0; }
+  .p-tl-head { display: grid; grid-template-columns: 120px 90px 1fr; background: #5b4fc5; color: white; padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .p-tl-row { display: grid; grid-template-columns: 120px 90px 1fr; padding: 10px 14px; border-bottom: 1px solid #f3f4f6; align-items: center; font-size: 12px; }
+  .p-tl-row.ontime { background: #f0fdf4; }
+  .p-tl-row.delay { background: #fef2f2; }
+  .p-tl-row.empty { color: #d1d5db; }
+  .p-delay-badge { background: #ef4444; color: white; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; }
+  .p-chip { display: inline-block; padding: 2px 8px; margin: 2px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; color: #4f46e5; font-size: 11px; }
+  /* rec cards */
+  .p-rec { background: white; border-radius: 8px; padding: 14px 18px; margin: 8px 0; border-left: 5px solid #5b4fc5; box-shadow: 0 1px 2px rgba(0,0,0,0.05); color: #1a202c; font-size: 13px; }
+  .p-rec.red { border-left-color: #ef4444; }
+  .p-rec.orange { border-left-color: #f97316; }
+  .p-rec.green { border-left-color: #10b981; }
+  .p-rec.blue { border-left-color: #3b82f6; }
+  /* coverage */
+  .p-covered { color: #059669; font-weight: 600; }
+  .p-not-covered { color: #dc2626; font-weight: 600; }
+  .p-tc-link { display: inline-block; padding: 2px 8px; margin: 2px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; color: #4f46e5; font-size: 11px; }
+  /* bug severity */
+  .p-sev-critical { color: #dc2626; font-weight: 700; }
+  .p-sev-high { color: #ea580c; font-weight: 600; }
+  .p-sev-medium { color: #ca8a04; }
+  .p-sev-low { color: #16a34a; }
+  .p-unlinked-hdr { background: #f3f4f6; font-weight: 700; padding: 10px 14px; font-size: 13px; color: #374151; }
+  /* pipeline */
+  .p-pipe-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .p-pipe-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; color: #1a202c; flex: 1; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 13px; }
+  .p-pipe-card strong { color: #1f2937; font-weight: 700; display: block; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .p-fail-box { margin-top: 8px; padding: 8px 12px; background: #fef2f2; border-left: 3px solid #ef4444; border-radius: 4px; font-size: 12px; color: #991b1b; }
+  /* meta cards */
+  .p-meta-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0; }
+  .p-meta-card { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; flex: 1; min-width: 180px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+  .p-meta-card strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; }
+  .p-meta-card span { font-size: 13px; color: #1f2937; }
+  /* row colors for readiness */
+  .p-row-red td { background: #fef2f2 !important; }
+  .p-row-orange td { background: #fffbeb !important; }
+  .p-row-green td { background: #f0fdf4 !important; color: #16a34a; font-weight: 600; }
+
+
+  .preview-section table { background: white !important; }
+  .preview-section th { background: #5b4fc5 !important; color: white !important; border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+  .preview-section td { background: white !important; color: #1a202c !important; border-bottom: 1px solid #e5e7eb !important; }
+  .preview-section tr:nth-child(even) td { background: white !important; }
+</style>
+</head>
+<body>
+
+<nav class="tab-nav">
+  <a href="00_index.html" class="tab">🏠 หน้าหลัก</a>
+  <a href="01_executive_summary.html" class="tab">📊 Executive Summary</a>
+  <a href="02_priority_coverage.html" class="tab">🎯 Priority Coverage</a>
+  <a href="03_pbi_summary.html" class="tab">📋 PBI Summary</a>
+  <a href="04_recommendations.html" class="tab">💡 Recommendations</a>
+  <a href="05_dev_readiness.html" class="tab">⚠️ Dev Readiness</a>
+  <a href="06_pbi_readiness.html" class="tab active">📋 PBI Readiness</a>
+  <a href="07_delivery_timeline.html" class="tab">📅 Delivery Timeline</a>
+  <a href="08_requirements_mapping.html" class="tab">🔗 Requirements Mapping</a>
+  <a href="09_bug_traceability.html" class="tab">🐞 Bug Traceability</a>
+  <a href="10_pipeline_runs.html" class="tab">🚀 Pipeline Runs</a>
+  <a href="11_report_metadata.html" class="tab">📄 Report Metadata</a>
+</nav>
+
+<h1>📋 PBI Readiness Status</h1>
+<p>หัวข้อนี้แสดงตารางรายละเอียดสถานะความพร้อมของแต่ละ PBI — เป็นส่วนย่อยของ Development Readiness</p>
+
+<hr>
+
+<h2>🎯 วัตถุประสงค์</h2>
+<div class="box">
+  แสดงรายละเอียดสถานะความพร้อมของแต่ละ PBI ในรูปแบบตาราง ประกอบด้วยความคืบหน้าของ Development Tasks, จำนวน Open Bugs และจำนวน Test Scenarios ที่พร้อมทดสอบ เพื่อให้ทีมสามารถติดตามและ Follow Up ได้อย่างตรงจุด
+</div>
+
+<hr>
+
+<h2>🎨 ตัวอย่างตารางที่แสดงในรายงาน</h2>
+<div class="preview-wrap">
+  <div class="preview-label">📄 ตัวอย่างตาราง PBI Readiness Status</div>
+  <div class="preview-section">
+    <div class="preview-h2">📋 PBI Readiness Status</div>
+    <table class="p-table">
+      <tr><th>PBI ID</th><th>Title</th><th>Dev Tasks</th><th>Open Bugs</th><th>QA Tests</th><th>Status</th></tr>
+      <tr class="p-row-red"><td>🔴 PBI-12345</td><td>User Login Feature</td><td>3/5 Done</td><td>0</td><td>8 ready</td><td><strong>2 dev tasks pending</strong></td></tr>
+      <tr class="p-row-orange"><td>🐛 PBI-12346</td><td>Payment Processing</td><td>4/4 Done</td><td>2</td><td>5 ready</td><td><strong>2 open bugs</strong></td></tr>
+      <tr class="p-row-green"><td colspan="5" style="text-align:left;padding-left:14px;">✅ 6 PBIs Ready for QA Testing (60%)</td><td>Ready</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr>
+
+<h2>📍 ที่มาของข้อมูล</h2>
+<p>ข้อมูลมาจาก <code class="inline">readiness_data</code> ที่คำนวณโดย <code class="inline">calculate_dev_readiness()</code></p>
+
+<table>
+  <tr><th>Column</th><th>ดึงจาก field ไหน</th></tr>
+  <tr><td>PBI ID</td><td><code class="inline">pbi['pbi_id']</code> + link ไป Azure DevOps</td></tr>
+  <tr><td>Title</td><td><code class="inline">get_pbi_title(pbi_id)</code> → System.Title จาก cache</td></tr>
+  <tr><td>Dev Tasks</td><td><code class="inline">dev_tasks_done / dev_tasks_total</code></td></tr>
+  <tr><td>Open Bugs</td><td><code class="inline">open_bugs_count</code> (Custom.FixedStatus = 1-4)</td></tr>
+  <tr><td>QA Tests</td><td><code class="inline">test_scenarios_count</code> (total_tests ของ PBI)</td></tr>
+  <tr><td>Status</td><td><code class="inline">blocking_reason</code> เช่น "2 dev tasks pending"</td></tr>
+</table>
+
+<hr>
+
+<h2>🎨 สีของแต่ละ Row</h2>
+<table>
+  <tr><th>สี Row</th><th>ความหมาย</th><th>เงื่อนไข</th></tr>
+  <tr><td style="background:#fef2f2">🔴 แดง</td><td>Blocked by Dev</td><td>dev tasks ยังไม่เสร็จ</td></tr>
+  <tr><td style="background:#fffbeb">🟡 เหลือง</td><td>Blocked by Bugs</td><td>มี open bugs (FixedStatus 1-4)</td></tr>
+  <tr><td style="background:#f0fdf4">🟢 เขียว</td><td>Ready for QA</td><td>dev tasks เสร็จหมด + ไม่มี open bugs</td></tr>
+</table>
+
+<hr>
+
+<h2>💻 โค้ดหลักที่ใช้</h2>
+<pre><code class="language-python">def generate_dev_readiness_html(readiness_data, org, project_name, get_pbi_title_fn=None):
+    """สร้าง HTML ตาราง PBI Readiness Status"""
+
+    # วนลูปแสดง blocked PBIs ก่อน (dev blocked + bug blocked)
+    all_pbi_entries = []
+
+    for pbi in readiness_data['blocked_by_dev']:
+        all_pbi_entries.append({
+            'pbi_id': pbi['pbi_id'],
+            'dev_tasks_done': pbi['dev_tasks_done'],
+            'dev_tasks_total': pbi['dev_tasks_total'],
+            'open_bugs_count': pbi['open_bugs_count'],
+            'test_scenarios_count': pbi['test_scenarios_count'],
+            'status_text': pbi['blocking_reason'],  # "2 dev tasks pending"
+            'status_icon': '🔴',
+            'row_bg': 'background: #2a1a1a;'  # สีแดง
+        })
+
+    for pbi in readiness_data['blocked_by_bugs']:
+        all_pbi_entries.append({
+            ...
+            'status_text': pbi['blocking_reason'],  # "2 open bugs"
+            'status_icon': '🐛',
+            'row_bg': 'background: #2a1f0d;'  # สีเหลือง
+        })
+
+    # แสดงแต่ละ row
+    for entry in all_pbi_entries:
+        pbi_title = get_pbi_title_fn(pbi_num)  # ดึงจาก cache
+        dev_str = f"{entry['dev_tasks_done']}/{entry['dev_tasks_total']} Done"
+
+        html += f'''
+        &lt;tr style="{entry['row_bg']}"&gt;
+            &lt;td&gt;{entry['status_icon']} &lt;a href="{pbi_url}"&gt;{pbi_id}&lt;/a&gt;&lt;/td&gt;
+            &lt;td&gt;{pbi_title}&lt;/td&gt;
+            &lt;td&gt;{dev_str}&lt;/td&gt;
+            &lt;td&gt;{entry['open_bugs_count']}&lt;/td&gt;
+            &lt;td&gt;{entry['test_scenarios_count']} ready&lt;/td&gt;
+            &lt;td&gt;{entry['status_text']}&lt;/td&gt;
+        &lt;/tr&gt;
+        '''
+
+    # แสดง summary row สำหรับ Ready PBIs
+    if ready > 0:
+        html += f'&lt;tr style="background: #0d2a1a;"&gt;✅ {ready} PBIs Ready for QA Testing ({ready_pct}%)&lt;/tr&gt;'
+</code></pre>
+
+<footer>
+  <span style="font-size:0.72em;color:#4a6a7a">Prepared by Mintita Mahapittayaphaisan (Mook) — Lead QA Engineer, AgriTech &amp; Traceability | FIT and CPCRT Business Delivery</span>
+  <span style="font-size:0.68em;color:#4a6a7a">© 2026 Quality Assurance Division</span>
+</footer>
+
+</body>
+</html>
