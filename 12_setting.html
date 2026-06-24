@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>⚙️ Setting - QA Test Report Generator</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; max-width: 1280px; margin: 40px auto; padding: 0 24px; line-height: 1.9; color: #c9d8e8; background: #0f1923; }
+
+  h1 { color: #ffffff; border-bottom: 2px solid #00d4aa; padding-bottom: 14px; font-size: 1.9em; }
+  h2 { color: #00d4aa; margin-top: 50px; font-size: 1.15em; border-left: 4px solid #00d4aa; padding-left: 12px; }
+  h3 { color: #8ab4c8; margin-top: 24px; font-size: 1.0em; }
+
+  pre { border-radius: 8px; font-size: 13.5px; line-height: 1.8; margin: 12px 0; }
+  code { background: #1a2a3a; padding: 2px 8px; border-radius: 4px; font-size: 0.92em; color: #00d4aa; font-family: monospace; }
+
+  .box     { background: #0d2233; border-left: 4px solid #00d4aa; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #8ab4c8; }
+  .box-red { background: #2a0d0d; border-left: 4px solid #ff6b6b; padding: 16px 20px; margin: 12px 0; border-radius: 6px; color: #ffaaaa; }
+  .box-green { background: #0d2a0d; border-left: 4px solid #00d4aa; padding: 16px 20px; margin: 12px 0; border-radius: 6px; color: #8ab4c8; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; background: #1a2a3a; border-radius: 8px; overflow: hidden; }
+  th { background: #0d2233; color: #00d4aa; padding: 12px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid #1e3a4a; }
+  td { padding: 11px 16px; border-bottom: 1px solid #1e3a4a; color: #c9d8e8; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #162030; }
+
+  .step { background: #1a2a3a; border: 1px solid #1e3a4a; border-radius: 10px; padding: 24px 28px; margin: 20px 0; }
+  .step-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .step-num { background: #00d4aa; color: #0f1923; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1em; flex-shrink: 0; }
+  .step-num-skip { background: #1e3a4a; color: #4a6a7a; }
+  .step-title { color: #ffffff; font-size: 1.1em; font-weight: 600; }
+  .step-subtitle { color: #4a6a7a; font-size: 0.85em; margin-left: 4px; }
+
+  .check-block { background: #0a1520; border-radius: 8px; padding: 14px 18px; margin: 12px 0; font-family: monospace; font-size: 13px; line-height: 2.0; border: 1px solid #1e3a4a; }
+  .ok   { color: #00d4aa; }
+  .fail { color: #ff6b6b; }
+  .warn { color: #ffd700; }
+  .gray { color: #4a6a7a; }
+
+  /* VS Code Mock */
+  .vscode-window { background: #1e1e1e; border-radius: 8px; overflow: hidden; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 13px; margin: 16px 0; border: 1px solid #333; }
+  .vscode-titlebar { background: #3c3c3c; padding: 8px 14px; color: #cccccc; font-size: 11px; display: flex; align-items: center; gap: 8px; }
+  .vscode-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .vscode-body { display: flex; }
+  .vscode-lines { background: #1e1e1e; color: #858585; padding: 12px 10px; text-align: right; user-select: none; font-size: 12px; line-height: 2.0; min-width: 36px; border-right: 1px solid #333; }
+  .vscode-code { padding: 12px 18px; line-height: 2.0; overflow-x: auto; width: 100%; }
+  .hl-key   { color: #9cdcfe; }
+  .hl-val   { color: #ce9178; }
+  .hl-bool  { color: #569cd6; }
+  .hl-tag-red   { background: #ff6b6b22; color: #ff6b6b; font-size: 11px; padding: 1px 7px; border-radius: 4px; margin-left: 8px; }
+  .hl-tag-green { background: #00d4aa22; color: #00d4aa; font-size: 11px; padding: 1px 7px; border-radius: 4px; margin-left: 8px; }
+  .hl-tag-gray  { color: #4a6a7a; font-size: 11px; margin-left: 8px; }
+  .hl-line-selected { background: #264f78; display: block; margin: 0 -18px; padding: 0 18px; }
+
+  /* Terminal Mock */
+  .terminal { background: #1e1e1e; border-radius: 8px; overflow: hidden; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 13px; margin: 16px 0; border: 1px solid #333; }
+  .terminal-bar { background: #2d2d2d; padding: 7px 14px; color: #888; font-size: 11px; display: flex; align-items: center; gap: 8px; }
+  .terminal-body { padding: 14px 18px; line-height: 2.0; }
+  .t-prompt { color: #858585; }
+  .t-cmd    { color: #d4d4d4; }
+  .t-info   { color: #888888; }
+  .t-cyan   { color: #4ec9b0; }
+  .t-yellow { color: #dcdcaa; }
+  .t-green  { color: #4ec9b0; font-weight: 700; }
+  .t-red    { color: #ff6b6b; }
+
+  /* Prompt block */
+  .prompt-block { background: #0d2233; border: 1px solid #1e3a4a; border-radius: 8px; padding: 20px 24px; margin: 16px 0; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 13px; line-height: 2.2; }
+  .p-label { color: #00d4aa; font-weight: 600; display: inline-block; min-width: 140px; }
+  .p-value { color: #ff6b6b; font-style: italic; }
+  .p-note  { color: #4a6a7a; }
+
+  /* Result mock */
+  .result-block { background: #0a1520; border: 1px solid #1e3a4a; border-radius: 8px; padding: 20px 24px; margin: 16px 0; font-family: monospace; font-size: 13px; line-height: 2.2; }
+  .r-field { color: #9cdcfe; }
+  .r-val   { color: #ce9178; }
+  .r-ok    { color: #00d4aa; }
+  .r-btn   { background: #00d4aa; color: #0f1923; padding: 6px 18px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; display: inline-block; margin-top: 12px; }
+
+  .badge-skip { background: #1e3a4a; color: #4a6a7a; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin-left: 8px; }
+  .badge-important { background: #00d4aa; color: #0f1923; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin-left: 8px; font-weight: 700; }
+
+  footer { margin-top: 48px; padding: 14px 24px; border-top: 1px solid #1e3a4a; display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+
+<h1>⚙️ Setting<br>
+<small style="font-size:0.5em; color:#8ab4c8; font-weight:400;">การติดตั้งและปรับใช้ QA Test Report Generator กับทีมของคุณ</small></h1>
+
+<div class="box">
+  ติดตั้งครั้งเดียว &nbsp;·&nbsp; ใช้ <strong>Amazon Q</strong> ตั้งค่าให้อัตโนมัติ &nbsp;·&nbsp; ใช้งานได้ทุก Sprint โดยไม่ต้องแก้โค้ดใดๆ
+</div>
+
+<!-- ===== สิ่งที่ต้องเตรียม ===== -->
+<h2>📦 สิ่งที่ต้องเตรียมก่อนเริ่ม</h2>
+
+<table>
+  <tr><th>รายการ</th><th>ดาวน์โหลดที่</th><th>หมายเหตุ</th></tr>
+  <tr><td>✅ Python 3.x</td><td><a href="https://python.org/downloads" target="_blank" style="color:#00d4aa">python.org/downloads</a></td><td>ติดตั้งครั้งเดียว</td></tr>
+  <tr><td>✅ Git</td><td><a href="https://git-scm.com/download/win" target="_blank" style="color:#00d4aa">git-scm.com</a></td><td>ติดตั้งครั้งเดียว</td></tr>
+  <tr><td>✅ VS Code</td><td><a href="https://code.visualstudio.com" target="_blank" style="color:#00d4aa">code.visualstudio.com</a></td><td>ติดตั้งครั้งเดียว</td></tr>
+  <tr><td>✅ Amazon Q Extension</td><td>ติดตั้งใน VS Code (STEP 3)</td><td>ติดตั้งครั้งเดียว</td></tr>
+  <tr><td>✅ PAT Token</td><td>สร้างใน Azure DevOps (STEP 6)</td><td>ต่ออายุทุก 90 วัน</td></tr>
+</table>
+
+<div class="box">💡 ถ้ามีรายการไหนแล้ว ข้ามไปได้เลย ไม่ต้องติดตั้งซ้ำ</div>
+
+<!-- ===== STEP 1 ===== -->
+<h2>STEP 1 &nbsp;·&nbsp; ติดตั้ง Python <span class="badge-skip">ข้ามได้ถ้ามีแล้ว</span></h2>
+
+<div class="step">
+  <h3>ตรวจสอบว่ามีหรือยัง</h3>
+  <p style="color:#8ab4c8">เปิด <strong>Command Prompt</strong> (กด Win+R → พิมพ์ cmd → Enter) แล้วพิมพ์:</p>
+  <pre><code class="language-bash">python --version</code></pre>
+  <div class="check-block">
+    <div><span class="ok">✅ เห็น Python 3.x.x</span> &nbsp;→&nbsp; มีแล้ว ข้ามไป STEP 2 ได้เลย</div>
+    <div><span class="fail">❌ เห็น 'python' is not recognized</span> &nbsp;→&nbsp; ต้องติดตั้ง ทำตามขั้นตอนด้านล่าง</div>
+  </div>
+
+  <h3 style="margin-top:20px">ขั้นตอนติดตั้ง</h3>
+  <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px">
+    <li>เปิดเว็บ <a href="https://python.org/downloads" target="_blank" style="color:#00d4aa">python.org/downloads</a></li>
+    <li>คลิกปุ่ม <strong style="color:#fff">Download Python 3.x.x</strong> (ปุ่มเหลืองใหญ่)</li>
+    <li>เปิดไฟล์ที่ดาวน์โหลดมา</li>
+    <li>⚠️ ติ๊ก <strong style="color:#ff6b6b">☑ "Add Python to PATH"</strong> ก่อนกด Install ← <strong style="color:#ff6b6b">สำคัญมาก!</strong></li>
+    <li>คลิก <strong style="color:#fff">Install Now</strong> → รอติดตั้งเสร็จ</li>
+    <li>ปิด cmd แล้วเปิดใหม่ → พิมพ์ <code>python --version</code> อีกครั้ง</li>
+  </ol>
+  <div class="check-block">
+    <div><span class="ok">✅ เห็น Python 3.x.x</span> &nbsp;→&nbsp; ติดตั้งสำเร็จ ไป STEP 2</div>
+  </div>
+</div>
+
+<!-- ===== STEP 2 ===== -->
+<h2>STEP 2 &nbsp;·&nbsp; ติดตั้ง Git <span class="badge-skip">ข้ามได้ถ้ามีแล้ว</span></h2>
+
+<div class="step">
+  <h3>ตรวจสอบว่ามีหรือยัง</h3>
+  <pre><code class="language-bash">git --version</code></pre>
+  <div class="check-block">
+    <div><span class="ok">✅ เห็น git version x.x.x</span> &nbsp;→&nbsp; มีแล้ว ข้ามไป STEP 3 ได้เลย</div>
+    <div><span class="fail">❌ เห็น 'git' is not recognized</span> &nbsp;→&nbsp; ต้องติดตั้ง</div>
+  </div>
+
+  <h3 style="margin-top:20px">ขั้นตอนติดตั้ง</h3>
+  <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px">
+    <li>เปิดเว็บ <a href="https://git-scm.com/download/win" target="_blank" style="color:#00d4aa">git-scm.com/download/win</a> → ดาวน์โหลด</li>
+    <li>เปิดไฟล์ติดตั้ง → กด Next ไปเรื่อยๆ</li>
+    <li>เมื่อเจอหน้า <strong style="color:#fff">"Adjusting your PATH environment"</strong></li>
+    <li>⚠️ เลือก <strong style="color:#ff6b6b">"Git from the command line and also from 3rd-party software"</strong> ← <strong style="color:#ff6b6b">สำคัญมาก!</strong></li>
+    <li>กด Next จนจบ → Install → ปิด cmd แล้วเปิดใหม่</li>
+  </ol>
+  <div class="check-block">
+    <div><span class="ok">✅ เห็น git version x.x.x</span> &nbsp;→&nbsp; ติดตั้งสำเร็จ ไป STEP 3</div>
+  </div>
+</div>
+
+<!-- ===== STEP 3 ===== -->
+<h2>STEP 3 &nbsp;·&nbsp; ติดตั้ง VS Code และ Amazon Q <span class="badge-skip">ข้ามได้ถ้ามีแล้ว</span></h2>
+
+<div class="step">
+  <h3>ติดตั้ง VS Code</h3>
+
+  <div style="display:flex; gap:12px; margin:12px 0 0 0;">
+    <div style="flex:1; background:#0d2233; border:1px solid #1e3a4a; border-radius:8px; padding:18px 22px;">
+      <div style="color:#00d4aa; font-weight:600; margin-bottom:10px;">🧰 Windows</div>
+      <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px; margin:0;">
+        <li>เปิดเว็บ <a href="https://code.visualstudio.com" target="_blank" style="color:#00d4aa">code.visualstudio.com</a></li>
+        <li>คลิก <strong style="color:#fff">Download for Windows</strong></li>
+        <li>เปิดไฟล์ → กด Next ไปจนจบ → Install</li>
+      </ol>
+    </div>
+    <div style="flex:1; background:#0d2233; border:1px solid #1e3a4a; border-radius:8px; padding:18px 22px;">
+      <div style="color:#8ab4c8; font-weight:600; margin-bottom:10px;">🍎 Mac</div>
+      <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px; margin:0;">
+        <li>เปิดเว็บ <a href="https://code.visualstudio.com" target="_blank" style="color:#00d4aa">code.visualstudio.com</a></li>
+        <li>คลิก <strong style="color:#fff">Download for macOS</strong></li>
+        <li>เปิดไฟล์ .zip → ลาก <strong style="color:#fff">Visual Studio Code.app</strong> ไปที่โฟลเดอร์ <strong style="color:#fff">Applications</strong></li>
+        <li>เปิด VS Code จาก Applications</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px">ติดตั้ง Amazon Q Extension <span style="color:#4a6a7a; font-size:0.85em; font-weight:400;">(ทำเหมือนกันทั้ง Windows และ Mac)</span></h3>
+  <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px">
+    <li>เปิด VS Code</li>
+    <li>กด <code>Ctrl + Shift + X</code> (Windows) หรือ <code>Cmd + Shift + X</code> (Mac)</li>
+    <li>ค้นหา <code>Amazon Q</code> → คลิก <strong style="color:#00d4aa">Install</strong> (ของ AWS)</li>
+    <li>คลิก <strong style="color:#fff">Sign In</strong> ที่ pop-up → เลือก <strong style="color:#00d4aa">Use for Free with Builder ID</strong></li>
+    <li>Login ด้วยอีเมล → Browser เปิดขึ้นมา → กลับมา VS Code → คลิก <strong style="color:#fff">Open</strong></li>
+  </ol>
+  <div class="check-block">
+    <div><span class="ok">✅ เห็นไอคอน Q ที่แถบซ้าย VS Code</span> &nbsp;→&nbsp; พร้อมใช้งาน ไป STEP 4</div>
+  </div>
+</div>
+
+<!-- ===== STEP 4 ===== -->
+<h2>STEP 4 &nbsp;&middot;&nbsp; Clone Code ลงเครื่อง</h2>
+
+<div class="step">
+  <p style="color:#8ab4c8">เปิด Terminal ใน VS Code ด้วย <code>Ctrl + `</code> แล้วพิมพ์ทีละบรรทัด:</p>
+  <pre><code class="language-bash">cd C:\
+mkdir QA-Tools
+cd QA-Tools
+git clone https://dev.azure.com/AXONS-Strategic-And-Digital-Transformation/QA%20Team%20Playground/_git/QA-TESTREPORT
+code QA-TESTREPORT</code></pre>
+  <div class="check-block">
+    <div><span class="ok">✅ VS Code เปิดโฟลเดอร์ QA-TESTREPORT ขึ้นมาใหม่</span> &nbsp;&rarr;&nbsp; สำเร็จ ไป STEP 5</div>
+    <div><span class="fail">❌ Authentication failed</span> &nbsp;&rarr;&nbsp; ต้องสร้าง PAT ก่อน → ทำ STEP 6 แล้วกลับมาใหม่</div>
+  </div>
+</div>
+
+<!-- ===== STEP 5 ===== -->
+<h2>STEP 5 &nbsp;&middot;&nbsp; ติดตั้ง Python Packages</h2>
+
+<div class="step">
+  <p style="color:#8ab4c8">ใน Terminal ของ VS Code:</p>
+  <pre><code class="language-bash">cd AXONS_Report
+pip install requests python-dotenv</code></pre>
+  <div class="check-block">
+    <div><span class="ok">✅ Successfully installed</span> &nbsp;&rarr;&nbsp; โอเค ไป STEP 6</div>
+    <div><span class="ok">✅ Requirement already satisfied</span> &nbsp;&rarr;&nbsp; โอเค มีอยู่แล้ว ไป STEP 6</div>
+  </div>
+</div>
+
+<!-- ===== STEP 6 ===== -->
+<h2>STEP 6 &nbsp;&middot;&nbsp; สร้าง PAT จาก Azure DevOps</h2>
+
+<div class="step">
+  <div class="box">🔑 PAT คือรหัสผ่านพิเศษให้ Script ดึงข้อมูลจาก Azure DevOps แทนการ Login</div>
+
+  <h3>ขั้นตอน</h3>
+  <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px">
+    <li>เปิด Azure DevOps ขององค์กร → Login</li>
+    <li>คลิก <strong style="color:#fff">รูปโปรไฟล์</strong> มุมขวาบนสุด → <strong style="color:#fff">User Settings</strong> → <strong style="color:#fff">Personal Access Tokens</strong></li>
+    <li>คลิก <strong style="color:#00d4aa">+ New Token</strong></li>
+  </ol>
+
+  <h3>กรอกข้อมูลในฟอร์ม</h3>
+  <table>
+    <tr><th>Field</th><th>ค่าที่ต้องใส่</th></tr>
+    <tr><td>Name</td><td><code>QA-Report-2026</code></td></tr>
+    <tr><td>Expiration</td><td><code>90 days</code></td></tr>
+    <tr><td>Scopes</td><td>Custom defined → ติ๊ก <strong style="color:#00d4aa">☑ Work Items → Read</strong>, <strong style="color:#00d4aa">☑ Build → Read</strong>, <strong style="color:#00d4aa">☑ Code → Read</strong></td></tr>
+  </table>
+
+  <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px" start="4">
+    <li>คลิก <strong style="color:#00d4aa">Create</strong></li>
+    <li>⚠️ <strong style="color:#ff6b6b">Copy Token ทันที! เห็นแค่ครั้งเดียว ถ้าปิดหน้าต่างจะหายไปเลย!</strong></li>
+    <li>วางใน Notepad เก็บไว้ก่อน</li>
+  </ol>
+</div>
+
+<!-- ===== STEP 7 ===== -->
+<h2>STEP 7 &nbsp;&middot;&nbsp; ใช้ Amazon Q ตั้งค่าทีม <span class="badge-important">สำคัญที่สุด!</span></h2>
+
+<div class="step">
+  <div class="box">Amazon Q จะแก้ไฟล์ <code>.env</code> ให้อัตโนมัติ — ไม่ต้องแก้โค้ดเองเลย</div>
+
+  <h3>ขั้นตอน</h3>
+  <ol style="color:#8ab4c8; line-height:2.4; padding-left:20px">
+    <li>คลิกไอคอน <strong style="color:#00d4aa">Q</strong> ที่แถบซ้าย VS Code</li>
+    <li>คลิก <strong style="color:#fff">Open Chat</strong></li>
+    <li>คัดลอก Prompt ด้านล่าง → <strong style="color:#ff6b6b">แก้ข้อมูลใน [ ] ให้ตรงกับทีมของคุณ</strong> → วางใน Chat → กด Enter</li>
+  </ol>
+
+  <h3 style="margin-top:20px">Prompt ที่ต้องใช้</h3>
+  <div class="prompt-block">
+    <div style="color:#8ab4c8; margin-bottom:12px">ช่วยแก้ไฟล์ AXONS_Report/.env ให้หน่อยครับ ด้วยข้อมูลดังนี้:</div>
+    <div><span class="p-label">Organization</span> : <span class="p-value">[ชื่อ Org เช่น AXONS-FIT-Business-and-CPTG]</span></div>
+    <div><span class="p-label">PAT</span> : <span class="p-value">[วาง Token จาก STEP 6]</span></div>
+    <div><span class="p-label">Project</span> : <span class="p-value">[ชื่อ Project เช่น AgriTech]</span></div>
+    <div><span class="p-label">Team Code</span> : <span class="p-value">[ดูจาก Azure DevOps → Project Settings → Teams]</span></div>
+    <div><span class="p-label">Email ผู้รับ</span> : <span class="p-value">[email1@domain.com;email2@domain.com]</span></div>
+    <div style="margin-top:12px; color:#4a6a7a">กำหนดให้:</div>
+    <div class="p-note">- AZURE_DEVOPS_SPRINT ปล่อยว่าง (auto-detect Sprint ปัจจุบัน)</div>
+    <div class="p-note">- AZURE_DEVOPS_EMAIL=true</div>
+    <div class="p-note">- ไฟล์อื่นๆ ไม่ต้องแตะ</div>
+  </div>
+
+  <h3 style="margin-top:20px">ผลลัพธ์ที่จะเห็นใน Amazon Q</h3>
+  <div class="result-block">
+    <div style="color:#8ab4c8; margin-bottom:8px">แก้ไขไฟล์ AXONS_Report/.env แล้วครับ:</div>
+    <div><span class="r-field">AZURE_DEVOPS_ORG</span> &nbsp;= <span class="r-val">"AXONS-FIT-Business-and-CPTG"</span> <span class="r-ok">✓</span></div>
+    <div><span class="r-field">AZURE_DEVOPS_PAT</span> &nbsp;= <span class="r-val">"abc123xxxxx..."</span> <span class="r-ok">✓</span></div>
+    <div><span class="r-field">AZURE_DEVOPS_PROJECT</span> = <span class="r-val">"AgriTech"</span> <span class="r-ok">✓</span></div>
+    <div><span class="r-field">AZURE_DEVOPS_SPRINT</span> &nbsp;= <span class="r-val">""</span> <span style="color:#4a6a7a; font-size:12px">← ว่าง = auto-detect</span> <span class="r-ok">✓</span></div>
+    <div><span class="r-field">AZURE_DEVOPS_TEAM</span> &nbsp;&nbsp;= <span class="r-val">"PK"</span> <span class="r-ok">✓</span></div>
+    <div><span class="r-field">AZURE_DEVOPS_RECIPIENT</span> = <span class="r-val">"email@domain.com"</span> <span class="r-ok">✓</span></div>
+    <div style="margin-top:14px"><span class="r-btn">Accept Changes</span> <span style="color:#4a6a7a; font-size:12px; margin-left:12px">← ตรวจสอบว่าครบ 5 field แล้วคลิกตรงนี้</span></div>
+  </div>
+  <div class="check-block">
+    <div><span class="ok">✅ ไฟล์ .env ถูกบันทึกอัตโนมัติ</span> &nbsp;&rarr;&nbsp; ไป STEP 8</div>
+  </div>
+</div>
+
+<!-- ===== STEP 8 ===== -->
+<h2>STEP 8 &nbsp;&middot;&nbsp; รัน Script สร้าง Report</h2>
+
+<div class="step">
+  <p style="color:#8ab4c8">ใน Terminal ของ VS Code:</p>
+  <pre><code class="language-bash">python REPORT_Generator.py</code></pre>
+  <h3>ระหว่างรันจะเห็น:</h3>
+  <div class="terminal">
+    <div class="terminal-bar">● Terminal &nbsp;&mdash;&nbsp; AXONS_Report</div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">$</span> <span class="t-cmd">python REPORT_Generator.py</span></div>
+      <div class="t-info">Using config: config.json</div>
+      <div class="t-cyan">🔍 Testing Azure DevOps connection...</div>
+      <div class="t-yellow">🔄 Fetching work items...</div>
+      <div class="t-yellow">📄 Generating HTML report...</div>
+      <div class="t-yellow">📚 Creating wiki page...</div>
+      <div class="t-yellow">📧 Checking email configuration...</div>
+      <div class="t-green">✅ Report generation completed successfully!</div>
+    </div>
+  </div>
+  <div class="check-block">
+    <div><span class="ok">✅ เห็น "completed successfully!"</span> &nbsp;&rarr;&nbsp; สำเร็จ ไป STEP 9</div>
+    <div><span class="fail">❌ เห็น "401 Unauthorized"</span> &nbsp;&rarr;&nbsp; PAT ผิด กลับไป STEP 6 สร้าง PAT ใหม่</div>
+    <div><span class="fail">❌ เห็น "ModuleNotFoundError"</span> &nbsp;&rarr;&nbsp; รัน <code>pip install requests python-dotenv</code></div>
+  </div>
+</div>
+
+<!-- ===== STEP 9 ===== -->
+<h2>STEP 9 &nbsp;&middot;&nbsp; เปิดดู Report</h2>
+
+<div class="step">
+  <pre><code class="language-bash">explorer reports</code></pre>
+  <div class="check-block">
+    <div style="line-height:2.4">
+      <div>📂 โฟลเดอร์เปิดขึ้นมา:</div>
+      <div style="margin-left:20px; color:#4a6a7a">reports/</div>
+      <div style="margin-left:36px; color:#4a6a7a">└── <span style="color:#00d4aa">AgriTech_PK/</span> &nbsp;← เข้าโฟลเดอร์ตามชื่อ Project_Team</div>
+      <div style="margin-left:60px; color:#4a6a7a">└── <span style="color:#ce9178">index.html</span> &nbsp;← ดับเบิ้ลคลิกเพื่อเปิด Report ใน Browser</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SPRINT ต่อไป ===== -->
+<h2>🔁 Sprint ต่อไป — ไม่ต้องทำอะไรเพิ่มเลย</h2>
+
+<div class="box">
+  <code>AZURE_DEVOPS_SPRINT=""</code> ปล่อยว่างไว้เสมอ — Script จะ <strong>auto-detect Sprint ปัจจุบัน</strong> เองทุกครั้ง<br><br>
+  แค่รันคำสั่งนี้พอ ✅
+  <pre style="margin:12px 0 0 0"><code class="language-bash">python REPORT_Generator.py</code></pre>
+</div>
+
+<!-- ===== TROUBLESHOOTING ===== -->
+<h2>🔧 ปัญหาที่พบบ่อย</h2>
+
+<table>
+  <tr><th>Error ที่เห็น</th><th>สาเหตุ</th><th>วิธีแก้</th></tr>
+  <tr>
+    <td><code style="color:#ff6b6b">401 Unauthorized</code></td>
+    <td>PAT ผิดหรือหมดอายุ</td>
+    <td>สร้าง PAT ใหม่ → ให้ Amazon Q แก้ .env ใหม่</td>
+  </tr>
+  <tr>
+    <td><code style="color:#ff6b6b">'python' is not recognized</code></td>
+    <td>ไม่ได้ Add to PATH</td>
+    <td>ติดตั้งใหม่ → ติ๊ก Add Python to PATH</td>
+  </tr>
+  <tr>
+    <td><code style="color:#ff6b6b">'git' is not recognized</code></td>
+    <td>ไม่ได้ Add to PATH</td>
+    <td>ติดตั้งใหม่ → เลือก Git from command line</td>
+  </tr>
+  <tr>
+    <td><code style="color:#ff6b6b">ModuleNotFoundError</code></td>
+    <td>ยังไม่ติดตั้ง packages</td>
+    <td><code>pip install requests python-dotenv</code></td>
+  </tr>
+  <tr>
+    <td>Report มี 0 PBIs</td>
+    <td>Team/Project ผิด</td>
+    <td>ให้ Amazon Q แก้ .env ใหม่ ตรวจ Team Code</td>
+  </tr>
+</table>
+
+<footer>
+  <span style="font-size:0.72em;color:#4a6a7a">Prepared by Mintita Mahapittayaphaisan (Mook) &mdash; Lead QA Engineer, AgriTech &amp; Traceability</span>
+  <span style="font-size:0.68em;color:#4a6a7a">&copy; 2026 Quality Assurance Division</span>
+</footer>
+
+</body>
+</html>

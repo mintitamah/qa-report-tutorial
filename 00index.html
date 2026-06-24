@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>คู่มือ QA Test Report Generator</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; max-width: 1280px; margin: 40px auto; padding: 0 24px; line-height: 1.9; color: #c9d8e8; background: #0f1923; }
+
+  h1 { color: #ffffff; border-bottom: 2px solid #00d4aa; padding-bottom: 14px; font-size: 1.9em; }
+  h2 { color: #00d4aa; margin-top: 50px; font-size: 1.25em; border-left: 4px solid #00d4aa; padding-left: 12px; }
+
+  pre, .flow { background: #0a1520; color: #8ab4c8; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 13.5px; line-height: 1.8; border: 1px solid #1e3a4a; }
+  code { background: #1a2a3a; padding: 2px 8px; border-radius: 4px; font-size: 0.92em; color: #00d4aa; font-family: monospace; }
+
+  .box { background: #0d2233; border-left: 4px solid #00d4aa; padding: 16px 20px; margin: 20px 0; border-radius: 6px; color: #8ab4c8; }
+
+  table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #1a2a3a; border-radius: 8px; overflow: hidden; }
+  th { background: #0d2233; color: #00d4aa; padding: 12px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid #1e3a4a; }
+  td { padding: 11px 16px; border-bottom: 1px solid #1e3a4a; color: #c9d8e8; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #162030; }
+
+  .card { background: #1a2a3a; border: 1px solid #1e3a4a; border-radius: 10px; padding: 20px 24px; margin: 14px 0; transition: border-color 0.15s; }
+  .card:hover { border-color: #00d4aa; }
+  .card h3 { margin-top: 0; color: #ffffff; font-size: 1.05em; }
+  .card p { color: #8ab4c8; margin: 6px 0 14px; font-size: 0.93em; }
+  .card a { display: inline-block; background: #00d4aa; color: #0f1923; padding: 7px 18px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 700; transition: background 0.15s; }
+  .card a:hover { background: #00b894; }
+
+
+
+  footer { margin-top: 48px; padding: 14px 24px; border-top: 1px solid #1e3a4a; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 12px; }
+  footer span:last-child { white-space: nowrap; flex-shrink: 0; }
+
+  .preview-section table { background: white !important; }
+  .preview-section th { background: #5b4fc5 !important; color: white !important; border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+  .preview-section td { background: white !important; color: #1a202c !important; border-bottom: 1px solid #e5e7eb !important; }
+  .preview-section tr:nth-child(even) td { background: white !important; }
+</style>
+</head>
+<body>
+
+<h1>📊 คู่มือ QA Test Report Generator<br><small style="font-size:0.55em; color:#8ab4c8;">อธิบายทุกหัวข้อในรายงาน ตั้งแต่ที่มาของข้อมูล สูตรคำนวณ ความหมายของสี จนถึงโค้ดที่ใช้สร้าง</small></h1>
+
+<div class="box">
+  คู่มือนี้จัดทำขึ้นเพื่อให้ทุกคนในทีมที่เกี่ยวข้องสามารถอ่านและทำความเข้าใจรายงาน QA Test Report ได้อย่างถูกต้อง ครอบคลุมตั้งแต่ที่มาของข้อมูล สูตรคำนวณ ความหมายของสีและตัวเลขที่แสดงในแต่ละหัวข้อ รวมถึงโค้ดที่ใช้สร้างรายงาน
+</div>
+
+<h2>ภาษาและ Tools ที่ใช้</h2>
+<table>
+  <tr><th>Tool / ภาษา</th><th>ใช้ทำอะไร</th></tr>
+  <tr><td><strong>Python 3</strong></td><td>ภาษาหลักที่ใช้เขียนทั้งหมด</td></tr>
+  <tr><td><strong>requests</strong></td><td>ดึงข้อมูลจาก Azure DevOps API</td></tr>
+  <tr><td><strong>Azure DevOps REST API</strong></td><td>แหล่งข้อมูลหลัก (Work Items, Pipelines, Iterations)</td></tr>
+  <tr><td><strong>HTML + CSS</strong></td><td>สร้างหน้า Report ที่แสดงผล</td></tr>
+  <tr><td><strong>JSON</strong></td><td>รูปแบบข้อมูลที่ API ส่งกลับมา</td></tr>
+  <tr><td><strong>Power Automate</strong></td><td>ส่ง Email Report</td></tr>
+</table>
+
+<h2>โครงสร้างไฟล์หลัก</h2>
+<pre>
+AXONS_Report/
+├── REPORT_Generator.py          ← สมองหลัก: ดึงข้อมูลจาก Azure DevOps
+├── email_generator.py           ← สร้าง HTML Email (11 หัวข้อ)
+└── templates/
+    ├── html_template.py         ← สร้าง HTML ของแต่ละหัวข้อ
+    ├── metrics_calculator.py    ← สูตรคำนวณตัวเลขทั้งหมด
+    ├── config.py                ← ตั้งค่า labels และข้อความ
+    └── risk_dashboard.py        ← คำนวณ Risk Score และ QA Risk Dashboard
+</pre>
+
+<h2>ลำดับ 11 หัวข้อในรายงาน</h2>
+<table>
+  <tr><th>#</th><th>หัวข้อ</th><th>ฟังก์ชัน</th></tr>
+  <tr><td>1</td><td>📊 Executive Summary</td><td>generate_executive_summary()</td></tr>
+  <tr><td>2</td><td>🎯 Test Scenario Priority Coverage</td><td>generate_priority_coverage()</td></tr>
+  <tr><td>3</td><td>📋 PBI Summary</td><td>generate_html_hierarchy_table()</td></tr>
+  <tr><td>4</td><td>💡 Recommendations</td><td>generate_recommendations_section()</td></tr>
+  <tr><td>5</td><td>⚠️ QA Risk Dashboard</td><td>generate_risk_dashboard()</td></tr>
+  <tr><td>6</td><td>⚠️ Development Readiness for QA Testing</td><td>generate_dev_readiness_html()</td></tr>
+  <tr><td>7</td><td>📋 PBI Readiness Status</td><td>generate_dev_readiness_html()</td></tr>
+  <tr><td>8</td><td>📅 Dev Tasks Delivery Timeline</td><td>generate_dev_readiness_html()</td></tr>
+  <tr><td>9</td><td>🔗 Requirements Mapping</td><td>generate_requirements_mapping()</td></tr>
+  <tr><td>10</td><td>🐞 Bug Traceability</td><td>generate_requirements_bugs_traceability()</td></tr>
+  <tr><td>11</td><td>🚀 Latest Pipeline Runs</td><td>generate_pipeline_status()</td></tr>
+  <tr><td>12</td><td>📄 Report Metadata</td><td>generate_metadata()</td></tr>
+</table>
+
+<h2>Flow การทำงานทั้งหมด</h2>
+<div class="flow">
+main() เริ่มทำงาน
+    │
+    ├── 1. อ่าน config.json + .env  →  ได้ PAT, Project, Team, Sprint
+    │
+    ├── 2. auto_detect_current_sprint()  →  หา Sprint ปัจจุบันจาก Azure DevOps
+    │
+    ├── 3. fetch_work_items()  →  ดึง PBI ทั้งหมดจาก Sprint Backlog
+    │       └── process_pbi(pbi_id) สำหรับแต่ละ PBI:
+    │             ├── get_linked_test_cases()   →  ดึง Test Scenarios
+    │             ├── get_linked_task_details() →  ดึง Tasks
+    │             └── get_linked_bugs()         →  ดึง Bugs
+    │
+    ├── 4. search_unlinked_bugs_in_sprint()  →  หา Bug ที่ไม่ได้ link กับ PBI
+    │
+    ├── 5. save_html_report()  →  สร้าง HTML Report (11 หัวข้อ)
+    │
+    ├── 6. create_sprint_wiki()  →  สร้าง Wiki page ใน Azure DevOps
+    │
+    └── 7. generate_email_report()  →  ส่ง Email ผ่าน Power Automate
+</div>
+
+<h2>บทเรียนทั้งหมด 11 หัวข้อ</h2>
+
+<div class="card">
+  <h3>📊 Executive Summary</h3>
+  <p>สรุปภาพรวม Sprint ทั้งหมด — Coverage, Pass Rate, Automation, Bugs พร้อมสูตรคำนวณทุกตัวเลขและเกณฑ์สี</p>
+  <a href="01_executive_summary.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>🎯 Test Scenario Priority Coverage</h3>
+  <p>การกระจาย Test Scenarios ตาม Priority — Critical / High / Medium / Low ดึงจาก Custom.Prioritylevel พร้อมสูตรและนิยามสีแต่ละ priority</p>
+  <a href="02_priority_coverage.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>📋 PBI Summary</h3>
+  <p>ตารางสรุปผลทดสอบของแต่ละ PBI — Passed / Failed / Invalid / Not Start / Bugs</p>
+  <a href="03_pbi_summary.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>💡 Recommendations</h3>
+  <p>คำแนะนำอัตโนมัติตามสถานการณ์จริงของ Sprint — logic if/else จาก RTM data + Bug status</p>
+  <a href="04_recommendations.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>⚠️ Development Readiness for QA Testing</h3>
+  <p>QA Risk Dashboard + Quick Stats (PBI Ready/Blocked, Dev Tasks Delay/Pending) + ตาราง PBI Readiness + Timeline การส่งมอบงาน</p>
+  <a href="05_dev_readiness.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>📋 PBI Readiness Status</h3>
+  <p>ตารางรายละเอียดสถานะความพร้อมของแต่ละ PBI — Dev Tasks done/total, Open Bugs, QA Tests</p>
+  <a href="06_pbi_readiness.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>📅 Dev Tasks Delivery Timeline</h3>
+  <p>Timeline ว่า Dev ส่งมอบงานให้ QA วันไหนบ้าง — Day 1-7 On-time, Day 8-10 DELAY นับเฉพาะ tasks จาก PBI ที่มี test scenario</p>
+  <a href="07_delivery_timeline.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>🔗 Requirements Mapping</h3>
+  <p>Traceability ระหว่าง PBI กับ Test Scenarios — ✅ Covered / ❌ Not covered</p>
+  <a href="08_requirements_mapping.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>🐞 Bug Traceability</h3>
+  <p>Traceability ระหว่าง PBI กับ Bugs — Linked bugs + Unlinked bugs พร้อม Severity และ Status</p>
+  <a href="09_bug_traceability.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>🚀 Latest Pipeline Runs</h3>
+  <p>แสดงสถานะล่าสุดของ CI/CD Pipeline — ดึงจาก Azure DevOps Pipelines API + Build API พร้อม failure details</p>
+  <a href="10_pipeline_runs.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>📄 Report Metadata</h3>
+  <p>ข้อมูลเกี่ยวกับตัวรายงาน — Report Type, Data Source, Sprint Scope, Generated By</p>
+  <a href="11_report_metadata.html">อ่านรายละเอียด →</a>
+</div>
+
+<div class="card">
+  <h3>⚙️ Setting — การติดตั้งและปรับใช้ QA Test Report Generator</h3>
+  <p>ขั้นตอนการติดตั้งและตั้งค่าตั้งแต่เริ่มต้น — Clone Code, ตั้งค่า .env, สร้าง PAT จนถึงรัน Script ได้เลย</p>
+  <a href="12_setting.html">เริ่มตั้งค่า →</a>
+</div>
+
+<footer>
+  <span style="font-size:0.72em;color:#4a6a7a">Prepared by Mintita Mahapittayaphaisan (Mook) — Lead QA Engineer, AgriTech &amp; Traceability | FIT and CPCRT Business Delivery</span>
+  <span style="font-size:0.68em;color:#4a6a7a">© 2026 Quality Assurance Division</span>
+</footer>
+
+</body>
+</html>
