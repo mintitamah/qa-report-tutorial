@@ -84,9 +84,51 @@
   .badge-important { background: #00d4aa; color: #0f1923; padding: 2px 10px; border-radius: 12px; font-size: 0.8em; margin-left: 8px; font-weight: 700; }
 
   footer { margin-top: 48px; padding: 14px 24px; border-top: 1px solid #1e3a4a; display: flex; justify-content: space-between; align-items: center; }
+  .tab-nav {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    background: #0d2233;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 36px;
+    border: 1px solid #1e3a4a;
+  }
+  .tab-nav a.tab {
+    display: block;
+    text-align: center;
+    color: #8ab4c8;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 7px 6px;
+    border-radius: 6px;
+    border: 1px solid #1e3a4a;
+    background: #1a2a3a;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .tab-nav a.tab:hover { background: #1e3a4a; color: #00d4aa; border-color: #00d4aa; }
+  .tab-nav a.tab.active { background: #00d4aa; color: #0f1923; border-color: #00d4aa; font-weight: 700; }
 </style>
 </head>
 <body>
+
+<nav class="tab-nav">
+  <a href="00_index.html" class="tab">🏠 หน้าหลัก</a>
+  <a href="01_executive_summary.html" class="tab">📊 Executive Summary</a>
+  <a href="02_priority_coverage.html" class="tab">🎯 Priority Coverage</a>
+  <a href="03_pbi_summary.html" class="tab">📋 PBI Summary</a>
+  <a href="04_recommendations.html" class="tab">💡 Recommendations</a>
+  <a href="05_dev_readiness.html" class="tab">⚠️ Dev Readiness</a>
+  <a href="06_pbi_readiness.html" class="tab">📋 PBI Readiness</a>
+  <a href="07_delivery_timeline.html" class="tab">📅 Delivery Timeline</a>
+  <a href="08_requirements_mapping.html" class="tab">🔗 Requirements Mapping</a>
+  <a href="09_bug_traceability.html" class="tab">🐞 Bug Traceability</a>
+  <a href="10_pipeline_runs.html" class="tab">🚀 Pipeline Runs</a>
+  <a href="11_report_metadata.html" class="tab">📄 Report Metadata</a>
+  <a href="12_setting.html" class="tab active">⚙️ Setting</a>
+</nav>
 
 <h1>⚙️ Setting<br>
 <small style="font-size:0.5em; color:#8ab4c8; font-weight:400;">การติดตั้งและปรับใช้ QA Test Report Generator กับทีมของคุณ</small></h1>
@@ -291,7 +333,6 @@ pip install requests python-dotenv</code></pre>
     <div><span class="r-field">AZURE_DEVOPS_SPRINT</span> &nbsp;= <span class="r-val">""</span> <span style="color:#4a6a7a; font-size:12px">← ว่าง = auto-detect</span> <span class="r-ok">✓</span></div>
     <div><span class="r-field">AZURE_DEVOPS_TEAM</span> &nbsp;&nbsp;= <span class="r-val">"PK"</span> <span class="r-ok">✓</span></div>
     <div><span class="r-field">AZURE_DEVOPS_RECIPIENT</span> = <span class="r-val">"email@domain.com"</span> <span class="r-ok">✓</span></div>
-    <div style="margin-top:14px"><span class="r-btn">Accept Changes</span> <span style="color:#4a6a7a; font-size:12px; margin-left:12px">← ตรวจสอบว่าครบ 5 field แล้วคลิกตรงนี้</span></div>
   </div>
   <div class="check-block">
     <div><span class="ok">✅ ไฟล์ .env ถูกบันทึกอัตโนมัติ</span> &nbsp;&rarr;&nbsp; ไป STEP 8</div>
@@ -347,6 +388,78 @@ pip install requests python-dotenv</code></pre>
   <code>AZURE_DEVOPS_SPRINT=""</code> ปล่อยว่างไว้เสมอ — Script จะ <strong>auto-detect Sprint ปัจจุบัน</strong> เองทุกครั้ง<br><br>
   แค่รันคำสั่งนี้พอ ✅
   <pre style="margin:12px 0 0 0"><code class="language-bash">python REPORT_Generator.py</code></pre>
+</div>
+
+<!-- ===== SECTION TOGGLE ===== -->
+<h2>🎛️ ปรับแต่ง — เลือกหัวข้อที่ต้องการแสดง</h2>
+
+<div class="box">
+  สคริปรองรับการเปิด/ปิดแต่ละ section โดยแก้ค่าในไฟล์ <code>.env</code> ไฟล์เดียว — ไม่ต้องแตะโค้ดใดๆ
+</div>
+
+<div class="step">
+  <h3>📄 HTML Report — ไฟล์ที่ควบคุม: <code>REPORT_Generator.py</code></h3>
+  <p style="color:#8ab4c8">เปิดไฟล์ <code>.env</code> แล้วเปลี่ยนค่า <code>true</code> → <code>false</code> หัวข้อที่ไม่ต้องการ:</p>
+  <div class="vscode-window">
+    <div class="vscode-titlebar">
+      <span class="vscode-dot" style="background:#ff5f57"></span>
+      <span class="vscode-dot" style="background:#febc2e; margin:0 4px"></span>
+      <span class="vscode-dot" style="background:#28c840"></span>
+      <span style="margin-left:8px">📄 .env</span>
+    </div>
+    <div class="vscode-body">
+      <div class="vscode-lines">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</div>
+      <div class="vscode-code">
+        <div><span class="hl-tag-gray"># ── HTML Report Section Toggle ──</span></div>
+        <div><span class="hl-key">REPORT_SHOW_EXECUTIVE</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">REPORT_SHOW_PRIORITY</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">REPORT_SHOW_PBI</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">REPORT_SHOW_RECOMMENDATIONS</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">REPORT_SHOW_RISK</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">REPORT_SHOW_READINESS</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">REPORT_SHOW_MAPPING</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">REPORT_SHOW_BUGS</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">REPORT_SHOW_PIPELINE</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">REPORT_SHOW_METADATA</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="check-block">
+    <div><span class="ok">✅ ถ้าไม่ใส่ key ใน .env เลย</span> → default = true = แสดงปกติทุก section เหมือนเดิม</div>
+  </div>
+</div>
+
+<div class="step">
+  <h3>📧 Email — ไฟล์ที่ควบคุม: <code>email_generator.py</code></h3>
+  <p style="color:#8ab4c8">ใช้ key แยกต่างหากจาก HTML Report เพื่อควบคุมได้แยกจากกัน:</p>
+  <div class="vscode-window">
+    <div class="vscode-titlebar">
+      <span class="vscode-dot" style="background:#ff5f57"></span>
+      <span class="vscode-dot" style="background:#febc2e; margin:0 4px"></span>
+      <span class="vscode-dot" style="background:#28c840"></span>
+      <span style="margin-left:8px">📄 .env</span>
+    </div>
+    <div class="vscode-body">
+      <div class="vscode-lines">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</div>
+      <div class="vscode-code">
+        <div><span class="hl-tag-gray"># ── Email Section Toggle ──</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_EXECUTIVE</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_PRIORITY</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_PBI</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_RECOMMENDATIONS</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_RISK</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_READINESS</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_MAPPING</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_BUGS</span>=<span class="hl-bool">true</span> <span class="hl-tag-green">✅ แสดง</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_PIPELINE</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+        <div><span class="hl-key">EMAIL_SHOW_METADATA</span>=<span style="color:#ff6b6b">false</span> <span class="hl-tag-red">❌ ซ่อน</span></div>
+      </div>
+    </div>
+  </div>
+  <p style="color:#8ab4c8; margin-top:12px">→ ตัวอย่างนี้จะแสดงแค่ 5 หัวข้อใน Email: Executive, Priority, PBI, Recommendations, Bugs</p>
+  <div class="box" style="margin-top:16px">
+    💡 <strong>วิธีง่ายที่สุด</strong> — เปิดไฟล์ <code>.env</code> แล้วเปลี่ยนค่า <code>true</code> → <code>false</code> ได้เลย ใช้เวลาแค่ 30 วินาที
+  </div>
 </div>
 
 <!-- ===== TROUBLESHOOTING ===== -->
