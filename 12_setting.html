@@ -244,15 +244,24 @@
 <h2>STEP 4 &nbsp;&middot;&nbsp; Clone Code ลงเครื่อง</h2>
 
 <div class="step">
-  <p style="color:#8ab4c8">เปิด Terminal ใน VS Code ด้วย <code>Ctrl + `</code> แล้วพิมพ์ทีละบรรทัด:</p>
-  <pre><code class="language-bash">cd C:\
-mkdir QA-Tools
-cd QA-Tools
-git clone https://dev.azure.com/AXONS-Strategic-And-Digital-Transformation/QA%20Team%20Playground/_git/QA-TESTREPORT
-code QA-TESTREPORT</code></pre>
+  <p style="color:#8ab4c8">เปิด Terminal แล้วรันคำสั่งนี้:</p>
+
+  <pre><code class="language-bash">git clone https://dev.azure.com/AXONS-Strategic-And-Digital-Transformation/QA%20Team%20Playground/_git/QA-TESTREPORT</code></pre>
+
+  <p style="color:#8ab4c8; margin-top:8px">⚠️ ถ้าระบบถาม Username/Password:</p>
   <div class="check-block">
-    <div><span class="ok">✅ VS Code เปิดโฟลเดอร์ QA-TESTREPORT ขึ้นมาใหม่</span> &nbsp;&rarr;&nbsp; สำเร็จ ไป STEP 5</div>
-    <div><span class="fail">❌ Authentication failed</span> &nbsp;&rarr;&nbsp; ต้องสร้าง PAT ก่อน → ทำ STEP 6 แล้วกลับมาใหม่</div>
+    <div><span class="warn">Username</span> → อีเมล AXONS ของคุณ เช่น <code>yourname@axonstech.com</code></div>
+    <div><span class="warn">Password</span> → PAT Token (สร้างใน STEP 6 ถ้ายังไม่มี)</div>
+  </div>
+
+  <p style="color:#8ab4c8; margin-top:16px">หลัง clone เสร็จ เปิดโฟลเดอร์ใน VS Code:</p>
+  <div class="check-block">
+    <div>เปิด VS Code → <strong style="color:#fff">File → Open Folder</strong> → เลือกโฟลเดอร์ <code>QA-TESTREPORT</code></div>
+  </div>
+
+  <div class="check-block">
+    <div><span class="ok">✅ เห็นโฟลเดอร์ QA-TESTREPORT ใน VS Code</span> &nbsp;→&nbsp; สำเร็จ ไป STEP 5</div>
+    <div><span class="fail">❌ Authentication failed</span> &nbsp;→&nbsp; ต้องสร้าง PAT ก่อน → ทำ STEP 6 แล้วกลับมาใหม่</div>
   </div>
 </div>
 
@@ -457,42 +466,9 @@ pip install requests python-dotenv</code></pre>
     </div>
   </div>
   <p style="color:#8ab4c8; margin-top:12px">→ ตัวอย่างนี้จะแสดงแค่ 5 หัวข้อใน Email: Executive, Priority, PBI, Recommendations, Bugs</p>
-  <div class="box" style="margin-top:16px">
-    💡 <strong>วิธีง่ายที่สุด</strong> — เปิดไฟล์ <code>.env</code> แล้วเปลี่ยนค่า <code>true</code> → <code>false</code> ได้เลย ใช้เวลาแค่ 30 วินาที
-  </div>
+
 </div>
 
-<!-- ===== TROUBLESHOOTING ===== -->
-<h2>🔧 ปัญหาที่พบบ่อย</h2>
-
-<table>
-  <tr><th>Error ที่เห็น</th><th>สาเหตุ</th><th>วิธีแก้</th></tr>
-  <tr>
-    <td><code style="color:#ff6b6b">401 Unauthorized</code></td>
-    <td>PAT ผิดหรือหมดอายุ</td>
-    <td>สร้าง PAT ใหม่ → ให้ Amazon Q แก้ .env ใหม่</td>
-  </tr>
-  <tr>
-    <td><code style="color:#ff6b6b">'python' is not recognized</code></td>
-    <td>ไม่ได้ Add to PATH</td>
-    <td>ติดตั้งใหม่ → ติ๊ก Add Python to PATH</td>
-  </tr>
-  <tr>
-    <td><code style="color:#ff6b6b">'git' is not recognized</code></td>
-    <td>ไม่ได้ Add to PATH</td>
-    <td>ติดตั้งใหม่ → เลือก Git from command line</td>
-  </tr>
-  <tr>
-    <td><code style="color:#ff6b6b">ModuleNotFoundError</code></td>
-    <td>ยังไม่ติดตั้ง packages</td>
-    <td><code>pip install requests python-dotenv</code></td>
-  </tr>
-  <tr>
-    <td>Report มี 0 PBIs</td>
-    <td>Team/Project ผิด</td>
-    <td>ให้ Amazon Q แก้ .env ใหม่ ตรวจ Team Code</td>
-  </tr>
-</table>
 
 <footer>
   <span style="font-size:0.72em;color:#4a6a7a">Prepared by Mintita Mahapittayaphaisan (Mook) &mdash; Lead QA Engineer, AgriTech &amp; Traceability</span>
